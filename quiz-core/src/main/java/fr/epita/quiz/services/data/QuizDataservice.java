@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Mac;
 import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
@@ -50,16 +51,17 @@ public class QuizDataservice {
 		session.close();
 	}
 	
+	//Find all the search questions by string.
 	public Map<Question,List<MCQChoice>> findAllQuestions(Question question) {
-		
 		Map<Question,List<MCQChoice>> questionsAndChoices = new LinkedHashMap<Question,List<MCQChoice>>(); 
-		
+
 		List<Question> list = questionDAO.search(question);
-		List<MCQChoice> mcqlist=mcqDAO.search(new MCQChoice(question));
-		
+ 		
 		for (Question current : list) {
-			
-			questionsAndChoices.put(current, mcqlist);//TODO fetch mcqChoices
+			MCQChoice mcqChoice=new MCQChoice();
+			mcqChoice.setQuestion(question);
+			List<MCQChoice> mcqList=mcqDAO.search(mcqChoice);
+			questionsAndChoices.put(current, mcqList);//TODO fetch mcqChoices
 			
 		}
 		return questionsAndChoices;

@@ -59,17 +59,13 @@ public class QuestionResource {
 	public Response findAllQuestions( @QueryParam("query") String inputString) {
 		
 		List<QuestionMessage> messages = new ArrayList<QuestionMessage>();
-		
 		Question question = new Question();
-		
 		question.setQuestionLabel(inputString);
 		
 		Map<Question, List<MCQChoice>> map = ds.findAllQuestions(question);
 		
 		for(Entry<Question,List<MCQChoice>> entry : map.entrySet()) {
-		
 			QuestionMessage qm = new QuestionMessage();
-			
 			qm.setQuestionLabel(entry.getKey().getQuestionLabel());
 			qm.setMcqChoices(toMCQChoiceMessageList(entry.getValue()));			
 			messages.add(qm);
