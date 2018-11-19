@@ -3,8 +3,6 @@ package fr.epita.quiz.resources;
 import java.util.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
@@ -20,6 +18,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fr.epita.maths.test.TestDI;
 import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.Question;
 import fr.epita.quiz.services.data.QuestionDAO;
@@ -45,8 +47,9 @@ public class QuestionResource {
 	public Response createQuestion(QuestionMessage message) throws URISyntaxException {
  		
 		Question question = toQuestion(message);
-		ds.createQuestionWithChoices(question, new ArrayList<MCQChoice>());
-		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()+"/rest/questions"))).build();
+		
+		ds.createQuestionWithChoices(question,toMCQChoiceList(message.getMcqChoiceList()));		
+		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()))).build();
 	}
 	
 	//get question by id.
@@ -68,7 +71,7 @@ public class QuestionResource {
 			QuestionMessage qm = new QuestionMessage();
 			
 			qm.setQuestionLabel(entry.getKey().getQuestionLabel());
-			
+			qm.setMcqChoices(toMCQChoiceMessageList(entry.getValue()));			
 			messages.add(qm);
 		
 		}
@@ -76,6 +79,21 @@ public class QuestionResource {
 		return Response.ok(messages).build();
 	}
 	
+	private static List<MCQChoiceMessage> toMCQChoiceMessageList(List<MCQChoice> list) {
+		List<MCQChoiceMessage> mcqList=new ArrayList<>();
+		for (MCQChoice mcq : list) {
+			mcqList.add(fromMCQChoiceToMessagee(mcq));
+		}
+		return mcqList;
+	}
+
+	private static MCQChoiceMessage fromMCQChoiceToMessagee(MCQChoice mcq) {
+		MCQChoiceMessage mcqm=new MCQChoiceMessage();
+		mcqm.setLabel(mcq.getChoiceLabel());
+		mcqm.setValid(mcq.getValid());
+ 		return mcqm;
+ 	}
+
 	//get question by id
 	@GET
 	@Path("/{id}")
@@ -115,7 +133,6 @@ public class QuestionResource {
 		
 		return Response.ok(message).build();
 	}
-	
 	
 	
 	private static Question toQuestion(QuestionMessage qm) {
@@ -181,4 +198,22 @@ public class QuestionResource {
 		qm.setMcqChoiceList(resultList);
 	}
 	
+	
+	//Convert MCQChoiceMessage to MCQChoice list
+		private static List<MCQChoice> toMCQChoiceList(List<MCQChoiceMessage> list) {
+			List<MCQChoice> mcqList=new ArrayList<>();
+			for (MCQChoiceMessage mcqm : list) {
+				mcqList.add(fromMCQChoiceMessageeToMCQ(mcqm));
+			}
+			return mcqList;
+		}
+		
+		private static MCQChoice fromMCQChoiceMessageeToMCQ(MCQChoiceMessage mcqm) {
+			MCQChoice mcq=new MCQChoice();
+			mcq.setChoiceLabel(mcqm.getLabel());
+			mcq.setValid(mcqm.getValid());
+//			mcq.setQuestionLabel(mcq.getQuestionLabel());
+			mcq.setQuestion(mcq.getQuestion());
+			return mcq;
+		}
 }

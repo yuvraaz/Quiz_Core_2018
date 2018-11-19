@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.Question;
 
 
@@ -24,6 +25,14 @@ public class QuestionDAO extends GenericDAO<Question>{
 		
 
 	}
+	
+	public List<Question> findAll() {
+		Query<Question> searchQuery = getSession().createQuery("from Question", Question.class);
+ 		return searchQuery.list();
+		
+
+	}
+ 
 
 	@Override
 	public Class<Question> getType() {

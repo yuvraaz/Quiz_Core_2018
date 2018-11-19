@@ -15,12 +15,21 @@ public class MCQChoiceDAO extends GenericDAO<MCQChoice> {
 	private static final Logger LOGGER = LogManager.getLogger(MCQChoiceDAO.class);
 
 	public List<MCQChoice> search(MCQChoice mcqChoiceCriteria) {
-		Query<MCQChoice> searchQuery = getSession().createQuery("from MCQChoice where question = :question ", MCQChoice.class);
-		searchQuery.setParameter("question", mcqChoiceCriteria.getQuestion());
-		return searchQuery.list();	
-
+		return findAll();
+//		Query<MCQChoice> searchQuery = getSession().createQuery("from MCQChoice where question = :question", MCQChoice.class);
+//		searchQuery.setParameter("question", mcqChoiceCriteria.getQuestion());
+// 		return searchQuery.list();	
+	
 	}
 
+	public List<MCQChoice> findAll() {
+		Query<MCQChoice> searchQuery = getSession().createQuery("from MCQChoice", MCQChoice.class);
+		System.out.println("Sise of mcq............."+searchQuery.getResultList().size());
+		return searchQuery.list();	
+		
+
+	}
+	
 	@Override
 	public Class<MCQChoice> getType() {
 		// TODO Auto-generated method stub

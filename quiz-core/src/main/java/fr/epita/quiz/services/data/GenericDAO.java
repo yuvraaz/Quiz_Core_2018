@@ -84,6 +84,8 @@ public abstract class GenericDAO<T> {
 	}
 	
 	public abstract List<T> search(T criteriaInstance);
+	public abstract List<T> findAll();
+
 
 	public T getById(Serializable id) {
 		return getSession().get(getType(), id);

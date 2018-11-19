@@ -18,6 +18,7 @@ public class MCQChoice {
 	private Boolean valid;
 	
 	private String choiceLabel;
+	private String questionLabel;
 	
 	@ManyToOne
 	private Question question;
@@ -35,7 +36,10 @@ public class MCQChoice {
 	public MCQChoice() {
 
 	}
-
+	
+	public MCQChoice(Question q) {
+this.question=q;
+	}
 
 	public Long getId() {
 		return id;
@@ -66,6 +70,11 @@ public class MCQChoice {
 		this.choiceLabel = choiceLabel;
 	}
 	
-	
-
+	public String getQuestionLabel() {
+		return question.getQuestionLabel();
+	}
+	public void setQuestionLabel(String questionLabel) {
+		this.questionLabel = questionLabel;
+	}
+	 
 }
