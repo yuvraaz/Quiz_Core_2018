@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -24,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import fr.epita.maths.test.TestDI;
 import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.Question;
+import fr.epita.quiz.datamodel.QuestionMCQPozo;
 import fr.epita.quiz.services.data.QuestionDAO;
 import fr.epita.quiz.services.data.QuizDataservice;
 import fr.epita.quiz.services.web.api.transport.MCQChoiceMessage;
@@ -49,9 +51,12 @@ public class QuestionResource {
 		Question question = toQuestion(message);
 		
 		ds.createQuestionWithChoices(question,toMCQChoiceList(message.getMcqChoiceList()));		
+//		ds.createQuestionWithChoices1(messageToQuestionMCQPozo(message));		
+
 		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()))).build();
 	}
-	
+
+
 	//get question by id.
 	@GET
 	@Path("/")
@@ -66,6 +71,7 @@ public class QuestionResource {
 		
 		for(Entry<Question,List<MCQChoice>> entry : map.entrySet()) {
 			QuestionMessage qm = new QuestionMessage();
+			qm.setId(entry.getKey().getId());
 			qm.setQuestionLabel(entry.getKey().getQuestionLabel());
 			qm.setMcqChoices(toMCQChoiceMessageList(entry.getValue()));			
 			messages.add(qm);
@@ -85,6 +91,7 @@ public class QuestionResource {
 
 	private static MCQChoiceMessage fromMCQChoiceToMessagee(MCQChoice mcq) {
 		MCQChoiceMessage mcqm=new MCQChoiceMessage();
+		mcqm.setId(mcq.getId());
 		mcqm.setLabel(mcq.getChoiceLabel());
 		mcqm.setValid(mcq.getValid());
  		return mcqm;
@@ -128,6 +135,67 @@ public class QuestionResource {
 		qDao.update(question);
 		
 		return Response.ok(message).build();
+	}
+	
+	
+	//delete question by id
+//	@DELETE
+//	@Path("/{id}")
+//	public Response deleteById(@PathParam("id")Long id){		
+//		System.out.println(">>>>>>>>>>>>>delete params....."+id);
+// 		Question question = qDao.getById(id);
+//		System.out.println(">>>>>>>>>>>>>delete question....."+question.getQuestionLabel());
+//
+//		if (question == null) {
+//			return Response.status(Status.NOT_FOUND).entity("{\"message\" : 'Question not found in database'}").build();
+//		}
+////		Boolean result = ds.deleteQuestionWithMCQChoices(question);
+////		if (result == Boolean.FALSE)
+////			return Response.status(Status.BAD_REQUEST).build();
+//
+//		return Response.ok(question).build();
+//	}
+	
+//	@POST
+//	@Path("/delete")
+//	@Consumes(value = { MediaType.APPLICATION_JSON })
+//	public Response deleteQuestionAndChoices(QuestionMessage message) {
+//		System.out.println(">>>>>>>>>>>>>delete params....."+message.getQuestionLabel());
+// 		Question question = ds.getQuestionById(Long.valueOf(message.getId()));
+//		if (question == null) {
+//			return Response.status(Status.NOT_FOUND).entity("{\"message\" : 'Question not found in database'}").build();
+//		}
+//		Boolean result = ds.deleteQuestionWithMCQChoices(question);
+//		if (result == Boolean.FALSE)
+//			return Response.status(Status.BAD_REQUEST).build();
+//
+//		return Response.ok(message).build();
+//	}
+
+	
+
+	@DELETE
+	@Path("/{id}")
+	public Response deleteById(@PathParam("id")Long id){	
+		
+		List<QuestionMessage> messages = new ArrayList<QuestionMessage>();
+		Question question = new Question();
+		question.setId(id);
+ 		
+		Map<Question, List<MCQChoice>> map = ds.findAllQuestions(question);
+		
+		for(Entry<Question,List<MCQChoice>> entry : map.entrySet()) {
+			QuestionMessage qm = new QuestionMessage();
+			qm.setId(entry.getKey().getId());
+			qm.setQuestionLabel(entry.getKey().getQuestionLabel());
+			qm.setMcqChoices(toMCQChoiceMessageList(entry.getValue()));			
+			messages.add(qm);
+			System.out.println(">>>>>>>>>>>>>d....."+qm.getQuestionLabel());
+
+		
+		}
+		
+		return Response.ok(question).build();
 	}
 	
 	
@@ -208,8 +276,18 @@ public class QuestionResource {
 			MCQChoice mcq=new MCQChoice();
 			mcq.setChoiceLabel(mcqm.getLabel());
 			mcq.setValid(mcqm.getValid());
-//			mcq.setQuestionLabel(mcq.getQuestionLabel());
+			mcq.setQuestionLabel(mcq.getQuestionLabel());
 			mcq.setQuestion(mcq.getQuestion());
 			return mcq;
+		}
+		
+		
+		
+		private QuestionMCQPozo messageToQuestionMCQPozo(QuestionMessage message) {
+			QuestionMCQPozo mcqPozo=new QuestionMCQPozo();
+			List<MCQChoice> mcqChoices=toMCQChoiceList(message.getMcqChoices());
+			mcqPozo.setQuestionLabel(message.getQuestionLabel());
+			mcqPozo.setMcq(mcqChoices);
+			return mcqPozo;
 		}
 }

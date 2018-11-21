@@ -8,16 +8,8 @@ public class MCQChoiceMessage {
 	private Long id;
 	private Boolean valid;
 	private String label;
-	private String questionlabel;
-
 	
 	
-	public String getQuestionlabel() {
-		return questionlabel;
-	}
-	public void setQuestionlabel(String questionlabel) {
-		this.questionlabel = questionlabel;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -40,9 +32,8 @@ public class MCQChoiceMessage {
 		MCQChoice choice = new MCQChoice();
 		choice.setChoiceLabel(this.label);
 		choice.setValid(valid);
-		choice.setQuestionLabel(question.getQuestionLabel());
 		choice.setId(id);
-		choice.setQuestion(question);
+//		choice.setQuestion(question);
 		return choice;
 		
 	}

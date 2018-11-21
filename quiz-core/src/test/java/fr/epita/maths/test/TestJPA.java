@@ -78,8 +78,8 @@ public class TestJPA {
 		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
 		choice2.setValid(true);
 		
-		choice1.setQuestion(question);
-		choice2.setQuestion(question);
+//		choice1.setQuestion(question);
+//		choice2.setQuestion(question);
 		
 		//when
 		
@@ -119,8 +119,8 @@ public class TestJPA {
 		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
 		choice2.setValid(true);
 		
-		choice1.setQuestion(question);
-		choice2.setQuestion(question);
+//		choice1.setQuestion(question);
+//		choice2.setQuestion(question);
 		
 		//when
 		

@@ -36,8 +36,8 @@ public class TestJPAWithEMF {
 		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
 		choice2.setValid(true);
 
-		choice1.setQuestion(question);
-		choice2.setQuestion(question);
+//		choice1.setQuestion(question);
+//		choice2.setQuestion(question);
 
 		// when
 		persistQuestionAndChoices(question, choice1, choice2);

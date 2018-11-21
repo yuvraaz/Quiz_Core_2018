@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +17,15 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public abstract class GenericDAO<T> {
 	
+	 
+	
 	private static final Logger LOGGER = LogManager.getLogger(GenericDAO.class);
 
 	@Inject
 	private SessionFactory sf;
+	
+	
+	
 
 	public void update(T instance) {
 		Session session = getSession();
@@ -84,8 +91,10 @@ public abstract class GenericDAO<T> {
 	}
 	
 	public abstract List<T> search(T criteriaInstance);
-	public abstract List<T> findAll();
+	public abstract List<T> search(Long id);
 
+	public abstract List<T> findAll();
+ 	
 
 	public T getById(Serializable id) {
 		return getSession().get(getType(), id);

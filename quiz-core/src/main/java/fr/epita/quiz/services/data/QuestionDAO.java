@@ -17,13 +17,11 @@ public class QuestionDAO extends GenericDAO<Question>{
 	private static final Logger LOGGER = LogManager.getLogger(QuestionDAO.class);
 
 
-	public List<Question> search(Question questionCriteria) {
-		
-		Query<Question> searchQuery = getSession().createQuery("from Question where questionLabel like :inputString ", Question.class);
-		searchQuery.setParameter("inputString", "%"+questionCriteria.getQuestionLabel()+"%");
-		return searchQuery.list();
-		
-
+	
+	public boolean isQuestionExists(String searchText) {
+		Query<Question> searchQuestionQuiry = getSession().createQuery("from Question where questionLabel like :inputString ", Question.class);
+		searchQuestionQuiry.setParameter("inputString", "%"+searchText+"%");
+  		return searchQuestionQuiry.list().size()>0?true:false;
 	}
 	
 	public List<Question> findAll() {
@@ -33,11 +31,24 @@ public class QuestionDAO extends GenericDAO<Question>{
 
 	}
  
-
 	@Override
 	public Class<Question> getType() {
 		// TODO Auto-generated method stub
 		return Question.class;
+	}
+
+	public List<Question> search(Question questionCriteria) {
+		Query<Question> searchQuery = getSession().createQuery("from Question where questionLabel like :inputString ", Question.class);
+		searchQuery.setParameter("inputString", "%"+questionCriteria.getQuestionLabel()+"%");
+		return searchQuery.list();
+		
+
+	}
+	
+	public List<Question> search(Long id) {
+		Query<Question> searchQuery = getSession().createQuery("from Question where id like :inputString ", Question.class);
+		searchQuery.setParameter("inputString", "%"+String.valueOf(id)+"%");
+		return searchQuery.list();
 	}
 
 
