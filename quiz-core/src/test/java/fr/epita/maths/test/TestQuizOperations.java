@@ -89,7 +89,6 @@ public class TestQuizOperations {
 		session.save(choice1);
 		session.save(choice2);
 		tx.commit();
-		
 		session.close();
 		
 		//then
@@ -100,10 +99,6 @@ public class TestQuizOperations {
 		
 		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
 		Assert.assertEquals(2, searchQueryMCQ.list().size());
-		
-		
-		
-		
 		session2.close();
 		
 	}
@@ -112,7 +107,6 @@ public class TestQuizOperations {
 
 	@Test
 	public void testSearchByString() {
-		
 		//given 
 		Question question = new Question();
 		question.setQuestionLabel("What is Computer?");
@@ -126,7 +120,6 @@ public class TestQuizOperations {
 		
 		choice1.setQuestion(question);
 		choice2.setQuestion(question);
-		
 		//when
 		
 		Session session = sf.openSession();
@@ -135,9 +128,7 @@ public class TestQuizOperations {
 		session.save(choice1);
 		session.save(choice2);
 		tx.commit();
-		
 		session.close();
-		
 		//then
 		Session session2 = sf.openSession();
 		Query<Question> searchQuery = session2.createQuery("from Question", Question.class);
@@ -147,7 +138,6 @@ public class TestQuizOperations {
 		Query<MCQChoice> searchMCQQuery = session2.createQuery("from MCQChoice where question = :question ", MCQChoice.class);
 	    searchQuery.setParameter("question", question);
  		Assert.assertEquals(2, searchQuery.list().size());
-		
 		
 		session2.close();
 		
@@ -185,13 +175,8 @@ public class TestQuizOperations {
 		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
 		Assert.assertEquals(2, searchQueryMCQ.list().size());
 		
-		
-		
 		Query deleteQueryQUestion = session2.createQuery("delete Entity where id = 1");
-		deleteQueryQUestion.executeUpdate();
-	
-		
-		
+		deleteQueryQUestion.executeUpdate();		
 		session2.close();
 		
 	}
@@ -200,7 +185,6 @@ public class TestQuizOperations {
 	/*Update Question with mcq*/
 	@Test
 	public void testUpdate() {
-		
 		//given 
 		Question question = new Question();
 		question.setQuestionLabel("What is IT?");
@@ -211,12 +195,9 @@ public class TestQuizOperations {
 		MCQChoice choice2 = new MCQChoice();
 		choice2.setChoiceLabel("It is computer science");
 		choice2.setValid(true);
-	
 		List<MCQChoice> mcqs = new ArrayList<MCQChoice>();
-		
 		//when
 		this.quizDS.createQuestionWithChoices(question, mcqs);
-		
 		//then
 		Session session2 = sf.openSession();
 		Query<Question> searchQuery = session2.createQuery("from Question", Question.class);
@@ -224,9 +205,6 @@ public class TestQuizOperations {
 		
 		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
 		Assert.assertEquals(2, searchQueryMCQ.list().size());
-		
-		
-		 
 	  		Question questionToUpdate = new Question();
 	  		MCQChoice mcqToUpdate = new MCQChoice();
 	  		
@@ -234,9 +212,8 @@ public class TestQuizOperations {
 	  		Query<Question> searchQUestionQuiry = session2.createQuery("from Question where questionLabel like :inputString ", Question.class);
 			searchQUestionQuiry.setParameter("inputString", "%"+searchString+"%");
 			Assert.assertEquals(2, searchQUestionQuiry.list().size());
-
+			
 	  		Long questionID=searchQUestionQuiry.list().get(0).getId();
-
 	  		questionToUpdate.setId(questionID);
 	  		questionToUpdate.setQuestionLabel("What is Programming" );
 	  		mcqToUpdate.setChoiceLabel("It is Information Technology");

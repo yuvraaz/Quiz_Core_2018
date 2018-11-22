@@ -17,8 +17,6 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 public abstract class GenericDAO<T> {
 	
-	 
-	
 	private static final Logger LOGGER = LogManager.getLogger(GenericDAO.class);
 
 	@Inject
@@ -27,6 +25,7 @@ public abstract class GenericDAO<T> {
 	
 	
 
+	/*Update Question and Mcq choices*/ 
 	public void update(T instance) {
 		Session session = getSession();
 		Commitable<Transaction> commitableTx = getTransaction(session);
@@ -35,6 +34,7 @@ public abstract class GenericDAO<T> {
 
 	}
 
+	/*Delete Question and mcq choices*/ 
 	public void delete(T instance) {
 		Session session = getSession();
 		Commitable<Transaction> commitableTx = getTransaction(session);

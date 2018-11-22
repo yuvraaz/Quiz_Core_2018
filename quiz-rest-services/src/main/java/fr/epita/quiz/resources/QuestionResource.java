@@ -39,7 +39,7 @@ public class QuestionResource {
 	@Inject
 	QuestionDAO qDao;
 	
-	//Create Questions
+	/*Create Questions*/
 	@POST
 	@Path("/")
 	@Consumes(value = { MediaType.APPLICATION_JSON })
@@ -54,7 +54,7 @@ public class QuestionResource {
 	}
 
 
-	//get question by id.
+	 /*get question by id.*/
 	@GET
 	@Path("/")
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -80,8 +80,9 @@ public class QuestionResource {
 	
 	private static List<MCQChoiceMessage> toMCQChoiceMessageList(List<MCQChoice> list) {
 		List<MCQChoiceMessage> mcqList=new ArrayList<>();
-		for (MCQChoice mcq : list) {
-			mcqList.add(fromMCQChoiceToMessagee(mcq));
+		
+		for (int i=0;i<list.size();i++) {
+ 			mcqList.add(fromMCQChoiceToMessagee(list.get(i)));
 		}
 		return mcqList;
 	}
@@ -94,7 +95,7 @@ public class QuestionResource {
  		return mcqm;
  	}
 
-	//get question by id
+	/*Get question by id*/
 	@GET
 	@Path("/{id}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -114,7 +115,7 @@ public class QuestionResource {
 		return Response.ok(message).build();
 	}
 	
-	//update question by id
+	/*update question by id*/
 	@PUT
 	@Path("/{id}")
 	@Consumes(value = { MediaType.APPLICATION_JSON })
@@ -134,6 +135,7 @@ public class QuestionResource {
 		return Response.ok(message).build();
 	}
 
+/*	Delete question by Id*/
 
 	@DELETE
 	@Path("/{id}")
