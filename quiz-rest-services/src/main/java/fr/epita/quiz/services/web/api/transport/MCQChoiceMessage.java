@@ -33,7 +33,7 @@ public class MCQChoiceMessage {
 		choice.setChoiceLabel(this.label);
 		choice.setValid(valid);
 		choice.setId(id);
-//		choice.setQuestion(question);
+		choice.setQuestion(question);
 		return choice;
 		
 	}

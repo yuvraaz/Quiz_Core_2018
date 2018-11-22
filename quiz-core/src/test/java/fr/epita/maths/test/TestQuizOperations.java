@@ -23,7 +23,7 @@ import fr.epita.quiz.services.data.QuizDataservice;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"/applicationContext.xml"})
-public class TestJPA {
+public class TestQuizOperations {
 	
 	@Inject
 	private SessionFactory sf;
@@ -40,11 +40,11 @@ public class TestJPA {
 	
 	
 	@Test
-	public void testJPA() {
+	public void testCreateQuestions() {
 		
 		//given 
 		Question question = new Question();
-		question.setQuestionLabel("What is JPA?");
+		question.setQuestionLabel("What is J?");
 		
 		//when
 		
@@ -65,17 +65,17 @@ public class TestJPA {
 	}
 	
 	@Test
-	public void testJPAMCQ() {
+	public void testCreateMCQChoices() {
 		
 		//given 
 		Question question = new Question();
-		question.setQuestionLabel("What is JPA?");
+		question.setQuestionLabel("What is the capital of Greece?");
 		MCQChoice choice1 = new MCQChoice();
-		choice1.setChoiceLabel("it is a dependency injection framework");
+		choice1.setChoiceLabel("it is a Kathmandu");
 		choice1.setValid(false);
 		
 		MCQChoice choice2 = new MCQChoice();
-		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
+		choice2.setChoiceLabel("it is Athence");
 		choice2.setValid(true);
 		
 		choice1.setQuestion(question);

@@ -103,17 +103,23 @@ public class QuizDataservice {
 
 	}
 	
-	//get question
-	public Question getQuestionById(Long id) {
+
+/*	 Get Single question by defined question id.
+ * 
+*/	public Question getQuestionById(Long id) {
 		Question question = questionDAO.getById(id);
 		return question;
 	}
 	
-	//delete question 
+ 
 
+
+/*	 Find delete question from database.
+ * 
+*/
 	public Boolean deleteQuestionWithMCQChoices(Question question) {
  		MCQChoice choiceCriteria = new MCQChoice();
-//		choiceCriteria.setQuestion(question);
+		choiceCriteria.setQuestion(question);
 		List<MCQChoice> mcqChoiceList = mcqDAO.search(choiceCriteria);
             System.out.println("List of mcq before deelte.............."+mcqChoiceList.size());
 		if (question != null && question.getId() != null) {
