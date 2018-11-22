@@ -22,8 +22,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fr.epita.maths.test.TestDI;
-import fr.epita.quiz.datamodel.MCQChoice;
+ import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.Question;
 import fr.epita.quiz.datamodel.QuestionMCQPozo;
 import fr.epita.quiz.services.data.QuestionDAO;
@@ -67,7 +66,7 @@ public class QuestionResource {
 		Question question = new Question();
 		question.setQuestionLabel(inputString);
 		
-		Map<Question, List<MCQChoice>> map = ds.findAllQuestions(question);
+		Map<Question, List<MCQChoice>> map = ds.searchAllQuestions(question);
 		
 		for(Entry<Question,List<MCQChoice>> entry : map.entrySet()) {
 			QuestionMessage qm = new QuestionMessage();
@@ -136,43 +135,7 @@ public class QuestionResource {
 		
 		return Response.ok(message).build();
 	}
-	
-	
-	//delete question by id
-//	@DELETE
-//	@Path("/{id}")
-//	public Response deleteById(@PathParam("id")Long id){		
-//		System.out.println(">>>>>>>>>>>>>delete params....."+id);
-// 		Question question = qDao.getById(id);
-//		System.out.println(">>>>>>>>>>>>>delete question....."+question.getQuestionLabel());
-//
-//		if (question == null) {
-//			return Response.status(Status.NOT_FOUND).entity("{\"message\" : 'Question not found in database'}").build();
-//		}
-////		Boolean result = ds.deleteQuestionWithMCQChoices(question);
-////		if (result == Boolean.FALSE)
-////			return Response.status(Status.BAD_REQUEST).build();
-//
-//		return Response.ok(question).build();
-//	}
-	
-//	@POST
-//	@Path("/delete")
-//	@Consumes(value = { MediaType.APPLICATION_JSON })
-//	public Response deleteQuestionAndChoices(QuestionMessage message) {
-//		System.out.println(">>>>>>>>>>>>>delete params....."+message.getQuestionLabel());
-// 		Question question = ds.getQuestionById(Long.valueOf(message.getId()));
-//		if (question == null) {
-//			return Response.status(Status.NOT_FOUND).entity("{\"message\" : 'Question not found in database'}").build();
-//		}
-//		Boolean result = ds.deleteQuestionWithMCQChoices(question);
-//		if (result == Boolean.FALSE)
-//			return Response.status(Status.BAD_REQUEST).build();
-//
-//		return Response.ok(message).build();
-//	}
 
-	
 
 	@DELETE
 	@Path("/{id}")
@@ -182,7 +145,7 @@ public class QuestionResource {
 		Question question = new Question();
 		question.setId(id);
  		
-		Map<Question, List<MCQChoice>> map = ds.findAllQuestions(question);
+		Map<Question, List<MCQChoice>> map = ds.searchAllQuestions(question);
 		
 		for(Entry<Question,List<MCQChoice>> entry : map.entrySet()) {
 			QuestionMessage qm = new QuestionMessage();

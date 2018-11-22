@@ -16,8 +16,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
-import fr.epita.maths.test.TestDI;
-import fr.epita.quiz.datamodel.MCQChoice;
+ import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.QuestionMCQPozo;
 import fr.epita.quiz.datamodel.Question;
 
@@ -38,6 +37,12 @@ public class QuizDataservice {
 	@Inject
 	SessionFactory sessionFactory;
 	
+	
+/*	 This is function is responsible for creation of question along with mcq choice
+*/	
+
+/*	 It will store only if the question is not existis on database.
+*/	
 	public void createQuestionWithChoices(Question question, List<MCQChoice> choices) {
 
 		Session session = sessionFactory.openSession();
@@ -49,7 +54,7 @@ public class QuizDataservice {
 		
 		
 		for (MCQChoice choice : choices) {
-//			choice.setQuestion(question);
+			choice.setQuestion(question);
 			mcqDAO.create(choice);
 		}
 		}else {
@@ -60,6 +65,10 @@ public class QuizDataservice {
 		
 		session.close();
 	}
+	
+
+/*	 Create MCQ along with Question Togather
+*/	
 	
 	public void createQuestionWithChoices1(QuestionMCQPozo pMcqPozo) {
 
@@ -72,15 +81,19 @@ public class QuizDataservice {
 		session.close();
 	}
 	
-	//Find all the search questions by string.
-	public Map<Question,List<MCQChoice>> findAllQuestions(Question question) {
+	
+	
+
+/*	 Find all the questions based on search text.
+ * 
+*/	public Map<Question,List<MCQChoice>> searchAllQuestions(Question question) {
 		 
 		Map<Question,List<MCQChoice>> questionsAndChoices = new LinkedHashMap<Question,List<MCQChoice>>(); 
 		List<Question> list = questionDAO.search(question);
 		
 		for (Question current : list) {
 			MCQChoice mcqChoice=new MCQChoice();
-//			mcqChoice.setQuestion(question);
+			mcqChoice.setQuestion(question);
 			List<MCQChoice> mcqList=mcqDAO.findAll();//later change it to searh.
  			questionsAndChoices.put(current, mcqList);
 			
@@ -102,7 +115,7 @@ public class QuizDataservice {
  		MCQChoice choiceCriteria = new MCQChoice();
 //		choiceCriteria.setQuestion(question);
 		List<MCQChoice> mcqChoiceList = mcqDAO.search(choiceCriteria);
-System.out.println("List of mcq before deelte.............."+mcqChoiceList.size());
+            System.out.println("List of mcq before deelte.............."+mcqChoiceList.size());
 		if (question != null && question.getId() != null) {
  			for (MCQChoice currentChoice : mcqChoiceList) {
  				System.out.println("Name of mcq before deelte.............."+currentChoice.getChoiceLabel());

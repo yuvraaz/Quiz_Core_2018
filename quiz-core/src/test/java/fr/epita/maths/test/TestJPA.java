@@ -78,8 +78,8 @@ public class TestJPA {
 		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
 		choice2.setValid(true);
 		
-//		choice1.setQuestion(question);
-//		choice2.setQuestion(question);
+		choice1.setQuestion(question);
+		choice2.setQuestion(question);
 		
 		//when
 		
@@ -102,38 +102,39 @@ public class TestJPA {
 		Assert.assertEquals(2, searchQueryMCQ.list().size());
 		
 		
+		
+		
 		session2.close();
 		
 	}
+	
+	
+
 	@Test
-	public void testJPAThroughDAOs() {
+	public void testSearchByString() {
 		
 		//given 
 		Question question = new Question();
-		question.setQuestionLabel("What is JPA?");
+		question.setQuestionLabel("What is Computer?");
 		MCQChoice choice1 = new MCQChoice();
-		choice1.setChoiceLabel("it is a dependency injection framework");
+		choice1.setChoiceLabel("It is a machine");
 		choice1.setValid(false);
 		
 		MCQChoice choice2 = new MCQChoice();
-		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
+		choice2.setChoiceLabel("It is a device");
 		choice2.setValid(true);
 		
-//		choice1.setQuestion(question);
-//		choice2.setQuestion(question);
+		choice1.setQuestion(question);
+		choice2.setQuestion(question);
 		
 		//when
 		
 		Session session = sf.openSession();
 		Transaction tx = session.beginTransaction();
-		
-		this.questionDAO.create(question);
-		this.mcqDAO.create(choice1);
-		this.mcqDAO.create(choice2);
-		
-
+		session.save(question);
+		session.save(choice1);
+		session.save(choice2);
 		tx.commit();
-		
 		
 		session.close();
 		
@@ -143,25 +144,32 @@ public class TestJPA {
 		
 		Assert.assertNotEquals(0, searchQuery.list().size());
 		
-		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
-		Assert.assertEquals(2, searchQueryMCQ.list().size());
+		Query<MCQChoice> searchMCQQuery = session2.createQuery("from MCQChoice where question = :question ", MCQChoice.class);
+	    searchQuery.setParameter("question", question);
+ 		Assert.assertEquals(2, searchQuery.list().size());
 		
 		
 		session2.close();
 		
 	}
+	 
+	 
+	
+	
+	/*Test Case For Delete Question*/
+
 	@Test
-	public void testJPAThroughDS() {
+	public void testDelete() {
 		
 		//given 
 		Question question = new Question();
-		question.setQuestionLabel("What is JPA?");
+		question.setQuestionLabel("What is IT?");
 		MCQChoice choice1 = new MCQChoice();
-		choice1.setChoiceLabel("it is a dependency injection framework");
+		choice1.setChoiceLabel("It is Information Technology");
 		choice1.setValid(false);
 		
 		MCQChoice choice2 = new MCQChoice();
-		choice2.setChoiceLabel("it is a specification to normalize persistence in java");
+		choice2.setChoiceLabel("It is computer science");
 		choice2.setValid(true);
 	
 		List<MCQChoice> mcqs = new ArrayList<MCQChoice>();
@@ -172,15 +180,71 @@ public class TestJPA {
 		//then
 		Session session2 = sf.openSession();
 		Query<Question> searchQuery = session2.createQuery("from Question", Question.class);
-		
 		Assert.assertNotEquals(0, searchQuery.list().size());
 		
 		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
 		Assert.assertEquals(2, searchQueryMCQ.list().size());
 		
 		
+		
+		Query deleteQueryQUestion = session2.createQuery("delete Entity where id = 1");
+		deleteQueryQUestion.executeUpdate();
+	
+		
+		
 		session2.close();
 		
 	}
+	
+	
+	/*Update Question with mcq*/
+	@Test
+	public void testUpdate() {
+		
+		//given 
+		Question question = new Question();
+		question.setQuestionLabel("What is IT?");
+		MCQChoice choice1 = new MCQChoice();
+		choice1.setChoiceLabel("It is Information Technology");
+		choice1.setValid(false);
+		
+		MCQChoice choice2 = new MCQChoice();
+		choice2.setChoiceLabel("It is computer science");
+		choice2.setValid(true);
+	
+		List<MCQChoice> mcqs = new ArrayList<MCQChoice>();
+		
+		//when
+		this.quizDS.createQuestionWithChoices(question, mcqs);
+		
+		//then
+		Session session2 = sf.openSession();
+		Query<Question> searchQuery = session2.createQuery("from Question", Question.class);
+		Assert.assertNotEquals(0, searchQuery.list().size());
+		
+		Query<MCQChoice> searchQueryMCQ = session2.createQuery("from MCQChoice", MCQChoice.class);
+		Assert.assertEquals(2, searchQueryMCQ.list().size());
+		
+		
+		 
+	  		Question questionToUpdate = new Question();
+	  		MCQChoice mcqToUpdate = new MCQChoice();
+	  		
+	  		String searchString="What is IT ? ";
+	  		Query<Question> searchQUestionQuiry = session2.createQuery("from Question where questionLabel like :inputString ", Question.class);
+			searchQUestionQuiry.setParameter("inputString", "%"+searchString+"%");
+			Assert.assertEquals(2, searchQUestionQuiry.list().size());
 
+	  		Long questionID=searchQUestionQuiry.list().get(0).getId();
+
+	  		questionToUpdate.setId(questionID);
+	  		questionToUpdate.setQuestionLabel("What is Programming" );
+	  		mcqToUpdate.setChoiceLabel("It is Information Technology");
+	  		mcqToUpdate.setValid(false);
+	        session2.update(questionToUpdate); 	    
+		    session2.close();
+		
+	}
+	
+	
 }
