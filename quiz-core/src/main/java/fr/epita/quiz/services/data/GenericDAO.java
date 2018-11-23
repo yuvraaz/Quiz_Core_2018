@@ -93,7 +93,7 @@ public abstract class GenericDAO<T> {
 	}
 	
 	public abstract List<T> search(T criteriaInstance);
-	public abstract List<T> search(Long id);
+	public abstract List<T> search();
 
 	public abstract List<T> findAll();
  	

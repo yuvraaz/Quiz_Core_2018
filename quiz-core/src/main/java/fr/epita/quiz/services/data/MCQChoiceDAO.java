@@ -18,12 +18,14 @@ public class MCQChoiceDAO extends GenericDAO<MCQChoice> {
 	
 	@Override
 	public List<MCQChoice> search(MCQChoice mcqChoiceCriteria) {
-    Query<MCQChoice> searchQuery = getSession().createQuery("from MCQChoice where question = :question ", MCQChoice.class);
-    searchQuery.setParameter("question", mcqChoiceCriteria.getQuestion());
-      return searchQuery.list();	
+		
+		return findAll();
+//    Query<MCQChoice> searchQuery = getSession().createQuery("from MCQChoice where question = :question ", MCQChoice.class);
+//    searchQuery.setParameter("question", mcqChoiceCriteria.getQuestion());
+//      return searchQuery.list();	
  	}
 
-	public List<MCQChoice> search(Long id) {
+	public List<MCQChoice> search() {
 		return findAll();	
 	
 	}

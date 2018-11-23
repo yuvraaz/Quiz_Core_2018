@@ -19,16 +19,6 @@ public class QuestionMessage {
 		this.questionLabel = questionLabel;
 	}
 
-	public List<MCQChoiceMessage> getMcqChoiceList() {
-		return mcqChoices;
-	}
-
-	public void setMcqChoiceList(List<MCQChoiceMessage> mcqChoices) {
-		this.mcqChoices = mcqChoices;
-	}
-	
-	
-
 	@Override
 	public String toString() {
 		return "QuestionMessage [id=" + id + ", questionLabel=" + questionLabel + ", mcqChoices=" + mcqChoices + "]";
@@ -42,10 +32,16 @@ public class QuestionMessage {
 		this.id = id;
 	}
 
-	public List<MCQChoiceMessage> getMcqChoices() {
+
+	public List<MCQChoiceMessage> getMcqChoiceList() {
 		return mcqChoices;
 	}
 
+	public void setMcqChoiceList(List<MCQChoiceMessage> mcqChoices) {
+		this.mcqChoices = mcqChoices;
+	}
+	
+ 
 	public void setMcqChoices(List<MCQChoiceMessage> mcqChoices) {
 		this.mcqChoices = mcqChoices;
 	}

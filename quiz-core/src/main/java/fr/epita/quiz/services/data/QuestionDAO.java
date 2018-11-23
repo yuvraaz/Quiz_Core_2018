@@ -45,10 +45,9 @@ public class QuestionDAO extends GenericDAO<Question>{
 
 	}
 	
-	public List<Question> search(Long id) {
-		Query<Question> searchQuery = getSession().createQuery("from Question where id like :inputString ", Question.class);
-		searchQuery.setParameter("inputString", "%"+String.valueOf(id)+"%");
-		return searchQuery.list();
+	public List<Question> search() {
+		Query<Question> searchQuery = getSession().createQuery("from Question ", Question.class);
+ 		return searchQuery.list();
 	}
 
 

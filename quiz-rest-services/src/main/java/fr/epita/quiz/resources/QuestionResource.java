@@ -45,7 +45,7 @@ public class QuestionResource {
 	@Path("/")
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public Response createQuestion(QuestionMessage message) throws URISyntaxException {
-		System.out.println("request message >>>>>>>>>>>>"+message.getMcqChoices());
+//		System.out.println("request message >>>>>>>>>>>>"+message.getMcqChoices());
 		Question question = toQuestion(message);
 		ds.createQuestionWithChoices(question,toMCQChoiceList(message.getMcqChoiceList()));		
  		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()))).build();
@@ -54,7 +54,7 @@ public class QuestionResource {
 	
 	
 
-	 /*get question by id.*/
+	 /*get question by question label.*/
 	@GET
 	@Path("/")
 	@Produces(value = { MediaType.APPLICATION_JSON })
