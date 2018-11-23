@@ -1,7 +1,6 @@
 package fr.epita.quiz.services.web.api.transport;
 
-import java.util.ArrayList;
-import java.util.List;
+ import java.util.List;
 
 
 public class QuestionMessage {

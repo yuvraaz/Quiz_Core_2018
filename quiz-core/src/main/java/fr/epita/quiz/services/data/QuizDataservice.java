@@ -17,8 +17,7 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
  import fr.epita.quiz.datamodel.MCQChoice;
-import fr.epita.quiz.datamodel.QuestionMCQPozo;
-import fr.epita.quiz.datamodel.Question;
+ import fr.epita.quiz.datamodel.Question;
 
 @Repository
 public class QuizDataservice {
@@ -29,8 +28,7 @@ public class QuizDataservice {
 	@Inject
 	MCQChoiceDAO mcqDAO;
 	
-	@Inject
-	QuestionMCQDAO questionMCQDAO;
+	 
 	
 	
 	
@@ -59,29 +57,14 @@ public class QuizDataservice {
 		}
 		}else {
 			System.out.println(">>>>>>>>>>>>>>>> the question exists");
-		}
+ 		}
 		
 		tx.commit();
 		
 		session.close();
 	}
 	
-
-/*	 Create MCQ along with Question Togather
-*/	
-	
-	public void createQuestionWithChoices1(QuestionMCQPozo pMcqPozo) {
-
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		questionMCQDAO.create(pMcqPozo);
-
-		tx.commit();
-		
-		session.close();
-	}
-	
-	
+ 
 	
 
 /*	 Find all the questions based on search text.

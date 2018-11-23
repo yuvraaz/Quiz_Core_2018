@@ -42,6 +42,8 @@ public abstract class GenericDAO<T> {
 		commitableTx.commit();
 
 	}
+	
+	/*Create Question and mcq choices*/ 
 
 	public void create(T instance) {
 		Session session = getSession();

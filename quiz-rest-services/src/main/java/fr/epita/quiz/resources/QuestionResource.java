@@ -18,12 +18,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
- 
 
  import fr.epita.quiz.datamodel.MCQChoice;
 import fr.epita.quiz.datamodel.Question;
-import fr.epita.quiz.datamodel.QuestionMCQPozo;
-import fr.epita.quiz.services.data.QuestionDAO;
+ import fr.epita.quiz.services.data.QuestionDAO;
 import fr.epita.quiz.services.data.QuizDataservice;
 import fr.epita.quiz.services.web.api.transport.MCQChoiceMessage;
 import fr.epita.quiz.services.web.api.transport.QuestionMessage;
@@ -39,20 +37,22 @@ public class QuestionResource {
 	@Inject
 	QuestionDAO qDao;
 	
+	
+	
+	
 	/*Create Questions*/
 	@POST
 	@Path("/")
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public Response createQuestion(QuestionMessage message) throws URISyntaxException {
- 		
+		System.out.println("request message >>>>>>>>>>>>"+message.getMcqChoices());
 		Question question = toQuestion(message);
-		
 		ds.createQuestionWithChoices(question,toMCQChoiceList(message.getMcqChoiceList()));		
-//		ds.createQuestionWithChoices1(messageToQuestionMCQPozo(message));		
-
-		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()))).build();
+ 		return Response.created(new URI(PATH + "/" + String.valueOf(question.getId()))).build();
 	}
 
+	
+	
 
 	 /*get question by id.*/
 	@GET
@@ -78,23 +78,8 @@ public class QuestionResource {
 		return Response.ok(messages).build();
 	}
 	
-	private static List<MCQChoiceMessage> toMCQChoiceMessageList(List<MCQChoice> list) {
-		List<MCQChoiceMessage> mcqList=new ArrayList<>();
-		
-		for (int i=0;i<list.size();i++) {
- 			mcqList.add(fromMCQChoiceToMessagee(list.get(i)));
-		}
-		return mcqList;
-	}
 
-	private static MCQChoiceMessage fromMCQChoiceToMessagee(MCQChoice mcq) {
-		MCQChoiceMessage mcqm=new MCQChoiceMessage();
-		mcqm.setId(mcq.getId());
-		mcqm.setLabel(mcq.getChoiceLabel());
-		mcqm.setValid(mcq.getValid());
- 		return mcqm;
- 	}
-
+	
 	/*Get question by id*/
 	@GET
 	@Path("/{id}")
@@ -115,6 +100,8 @@ public class QuestionResource {
 		return Response.ok(message).build();
 	}
 	
+	
+	
 	/*update question by id*/
 	@PUT
 	@Path("/{id}")
@@ -129,14 +116,16 @@ public class QuestionResource {
 		}
 		
 		applyToQuestion(message, question);
-		
 		qDao.update(question);
 		
 		return Response.ok(message).build();
 	}
+	
+	
+	
+	
 
 /*	Delete question by Id*/
-
 	@DELETE
 	@Path("/{id}")
 	public Response deleteById(@PathParam("id")Long id){	
@@ -154,12 +143,38 @@ public class QuestionResource {
 			qm.setMcqChoices(toMCQChoiceMessageList(entry.getValue()));			
 			messages.add(qm);
 			System.out.println(">>>>>>>>>>>>>d....."+qm.getQuestionLabel());
-
 		
 		}
 		
 		return Response.ok(question).build();
 	}
+	
+	
+
+	
+/*	Manipulations and operations functions
+*/	
+	private static List<MCQChoiceMessage> toMCQChoiceMessageList(List<MCQChoice> list) {
+		List<MCQChoiceMessage> mcqList=new ArrayList<>();
+		
+		for (int i=0;i<list.size();i++) {
+ 			mcqList.add(fromMCQChoiceToMessagee(list.get(i)));
+		}
+		return mcqList;
+	}
+	
+	
+	
+
+	private static MCQChoiceMessage fromMCQChoiceToMessagee(MCQChoice mcq) {
+		MCQChoiceMessage mcqm=new MCQChoiceMessage();
+		mcqm.setId(mcq.getId());
+		mcqm.setLabel(mcq.getChoiceLabel());
+		mcqm.setValid(mcq.getValid());
+ 		return mcqm;
+ 	}
+
+	
 	
 	
 	private static Question toQuestion(QuestionMessage qm) {
@@ -173,16 +188,7 @@ public class QuestionResource {
 		return question;
 	}
 	
-	private static QuestionMessage fromQuestion(Question question) {
-		
-		QuestionMessage questionMessage = new QuestionMessage();
-		
-		questionMessage.setId(question.getId());
-		
-		questionMessage.setQuestionLabel(question.getQuestionLabel());
-		
-		return questionMessage;
-	}
+	 
 	
 	private static void applyToQuestion(QuestionMessage qmessage, Question question) {
 		
@@ -190,44 +196,7 @@ public class QuestionResource {
 	
 	}
 	
-	private static MCQChoice toMCQChoice(MCQChoiceMessage mcqChoiceMessage) {
-		
-		MCQChoice mcqChoice = new MCQChoice();
-	
-		mcqChoice.setId(mcqChoiceMessage.getId());
-		
-		mcqChoice.setChoiceLabel(mcqChoiceMessage.getLabel());
-		
-		return mcqChoice;
-	}
-	
-	private static MCQChoiceMessage fromMCQChoice(MCQChoice mcqChoice) {
-		
-		MCQChoiceMessage mcqChoiceMessage = new MCQChoiceMessage();
-		
-		mcqChoiceMessage.setId(mcqChoice.getId());
-		
-		mcqChoiceMessage.setLabel(mcqChoice.getChoiceLabel());
-		
-		return mcqChoiceMessage;
-	}
-	
-	private void addMCQChoiceListToQuestionMessage(List<MCQChoice>list, QuestionMessage qm) {
-		
-		List<MCQChoiceMessage> resultList = new ArrayList<>();
-		
-		for (MCQChoice choice : list) {
-		
-			resultList.add(fromMCQChoice(choice));
-		
-		}
-
-		qm.setMcqChoiceList(resultList);
-	}
-	
-	
-	//Convert MCQChoiceMessage to MCQChoice list
-		private static List<MCQChoice> toMCQChoiceList(List<MCQChoiceMessage> list) {
+ 		private static List<MCQChoice> toMCQChoiceList(List<MCQChoiceMessage> list) {
 			List<MCQChoice> mcqList=new ArrayList<>();
 			for (MCQChoiceMessage mcqm : list) {
 				mcqList.add(fromMCQChoiceMessageeToMCQ(mcqm));
@@ -239,18 +208,10 @@ public class QuestionResource {
 			MCQChoice mcq=new MCQChoice();
 			mcq.setChoiceLabel(mcqm.getLabel());
 			mcq.setValid(mcqm.getValid());
-			mcq.setQuestionLabel(mcq.getQuestionLabel());
-			mcq.setQuestion(mcq.getQuestion());
+ 			mcq.setQuestion(mcq.getQuestion());
 			return mcq;
 		}
 		
 		
-		
-		private QuestionMCQPozo messageToQuestionMCQPozo(QuestionMessage message) {
-			QuestionMCQPozo mcqPozo=new QuestionMCQPozo();
-			List<MCQChoice> mcqChoices=toMCQChoiceList(message.getMcqChoices());
-			mcqPozo.setQuestionLabel(message.getQuestionLabel());
-			mcqPozo.setMcq(mcqChoices);
-			return mcqPozo;
-		}
+		 
 }
