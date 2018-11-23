@@ -7,6 +7,7 @@ class homepage extends Component {
     render() { 
         return ( 
             <div>
+            
                 <h1> Welcome to Quize Application</h1>
                 <div>
                 <NavLink className = "Navbar-link" to = "/Main">Create a quiz</NavLink>
@@ -14,12 +15,12 @@ class homepage extends Component {
                 </div>
 
                   <div>
-                  <NavLink className = "Navbar-link" to = "/TakeAquiz">Take a quize</NavLink>
+                  <NavLink className = "Navbar-link" to = "/TakeAquiz">Take a quiz</NavLink>
 
                 </div>
 
                   <div>
-                  <NavLink className = "Navbar-link" to = "/QuizeSample"> quize</NavLink>
+                  <NavLink className = "Navbar-link" to = "/QuizeSample"> quiz</NavLink>
 
                 </div>
 
